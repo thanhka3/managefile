@@ -30,13 +30,13 @@
         {
             this.Searchbar = new System.Windows.Forms.TextBox();
             this.Searchbtt = new System.Windows.Forms.Button();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.SearchView = new System.Windows.Forms.DataGridView();
+            ((System.ComponentModel.ISupportInitialize)(this.SearchView)).BeginInit();
             this.SuspendLayout();
             // 
             // Searchbar
             // 
-            this.Searchbar.Location = new System.Drawing.Point(73, 28);
+            this.Searchbar.Location = new System.Drawing.Point(85, 26);
             this.Searchbar.Name = "Searchbar";
             this.Searchbar.Size = new System.Drawing.Size(462, 20);
             this.Searchbar.TabIndex = 0;
@@ -51,25 +51,26 @@
             this.Searchbtt.UseVisualStyleBackColor = true;
             this.Searchbtt.Click += new System.EventHandler(this.Searchbtt_Click);
             // 
-            // dataGridView1
+            // SearchView
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 54);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(776, 352);
-            this.dataGridView1.TabIndex = 2;
+            this.SearchView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.SearchView.Location = new System.Drawing.Point(12, 54);
+            this.SearchView.Name = "SearchView";
+            this.SearchView.Size = new System.Drawing.Size(776, 352);
+            this.SearchView.TabIndex = 2;
+            this.SearchView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellDoubleClick);
             // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.SearchView);
             this.Controls.Add(this.Searchbtt);
             this.Controls.Add(this.Searchbar);
             this.Name = "Form2";
             this.Text = "Form2";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SearchView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -79,6 +80,6 @@
 
         private System.Windows.Forms.TextBox Searchbar;
         private System.Windows.Forms.Button Searchbtt;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView SearchView;
     }
 }

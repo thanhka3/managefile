@@ -125,7 +125,7 @@ namespace WindowsFormsApp1
 
         private void updatebtt_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show("Are you Sure", "Some Title", MessageBoxButtons.YesNo);
+            DialogResult dialogResult = MessageBox.Show("THIS MAY TAKE HOURS TO ADD", "Alert", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
                 var settings = new ConnectionSettings(new Uri("http://localhost:9200"))
@@ -143,9 +143,8 @@ namespace WindowsFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var myForm = new Form2();
-            myForm.Show();
-            this.Hide();
+            var f2 = new Form2();
+            f2.Show();
         }
     }
 }
