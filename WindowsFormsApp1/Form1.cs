@@ -1,8 +1,7 @@
 ﻿using Microsoft.WindowsAPICodePack.Controls;
 using Microsoft.WindowsAPICodePack.Shell;
-using System;
 using Nest;
-using System.Diagnostics;
+using System;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -132,8 +131,8 @@ namespace WindowsFormsApp1
                     .DefaultIndex("filesmanager");
                 var client = new ElasticClient(settings);
                 // list ổ đĩa
-                string[] drives = Environment.GetLogicalDrives();
-                Support.DirSearch("E:\\", client); // đọc riêng ổ E
+                //string[] drives = Environment.GetLogicalDrives();
+                Support.DirSearch("D:\\test\\", client); // đọc riêng ổ E
             }
             else if (dialogResult == DialogResult.No)
             {
@@ -145,6 +144,7 @@ namespace WindowsFormsApp1
         {
             var f2 = new Form2();
             f2.Show();
+            this.Hide();
         }
     }
 }

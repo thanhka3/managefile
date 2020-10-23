@@ -1,12 +1,7 @@
 ﻿using Nest;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace WindowsFormsApp1
@@ -28,13 +23,18 @@ namespace WindowsFormsApp1
                .DefaultIndex("filesmanager");
             var client = new ElasticClient(settings);
             var textsearch = Searchbar.Text;
-            Support.SearchFile(textsearch, client);
+            var list = Support.SearchFile(textsearch, client).Result;
+            // taoạo
+            SearchView.DataSource = list;
+            //SearchView.DataBindings;
+            //lay data
+            //them dong hien len grid
         }
 
-        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void SearchView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            // var url = SearchView.SelectedRows.Cells[3].Text;
-            //Process.Start(url);
+            var url = SearchView.Rows[e.RowIndex].Cells[2].Value.ToString();
+            Process.Start(url);
         }
     }
 }

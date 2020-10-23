@@ -1,13 +1,11 @@
-﻿using Nest;
+﻿using iTextSharp.text.pdf;
+using iTextSharp.text.pdf.parser;
+using Microsoft.Office.Interop.Word;
+using Nest;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using iTextSharp.text.pdf;
-using iTextSharp.text.pdf.parser;
-using Microsoft.Office.Interop.Word;
 
 namespace WindowsFormsApp1
 {
@@ -78,7 +76,7 @@ namespace WindowsFormsApp1
 
         // này sẽ trả về những gì thì thứ 2 lên bàn sau
         // hiện tại nó sẽ in ra console
-        public static async void SearchFile(String text, ElasticClient client)
+        public static async Task<List<Files>> SearchFile(string text, ElasticClient client)
         {
             // bool là so sánh , should giống như OR ...
             var searchResults = await client.SearchAsync<Files>(s => s
@@ -94,15 +92,17 @@ namespace WindowsFormsApp1
             ))));
 
             var result = searchResults.Documents;
-
+            List<Files> resultList = new List<Files>();
             if (result.Count <= 1)
             {
-                Console.WriteLine("there are no result here");
+                return null;
             }
             foreach (var f in result)
             {
-                Console.WriteLine(f.url);
+                resultList.Add(f);
             }
+
+            return resultList;
         }
 
         // read file word

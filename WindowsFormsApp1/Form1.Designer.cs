@@ -148,7 +148,7 @@
             this.Controls.Add(this.btn_back);
             this.Controls.Add(this.explorerBrowser);
             this.Name = "Form1";
-            this.Text = "[C#]";
+            this.Text = "Explorer.exe";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
