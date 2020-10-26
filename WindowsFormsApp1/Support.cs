@@ -81,21 +81,23 @@ namespace WindowsFormsApp1
         {
             // bool là so sánh , should giống như OR ...
             var searchResults = await client.SearchAsync<Files>(s => s
-            .AllIndices()
+
             .From(0)
-            .Size(200)
+            .Size(100)
             .Query(q => q
             .Bool(b => b
             .Should(sd => sd
             .Match(m => m.Field(f => f.url).Query(text)), sd => sd
-             .Match(m => m.Field(f => f.body).Query(text)), sd => sd
-               .Match(m => m.Field(f => f.body).Query(text))
+            .Match(m => m.Field(f => f.body).Query(text)), sd => sd
+            .Match(m => m.Field(f => f.filename).Query(text))
             ))));
 
             var result = searchResults.Documents;
+
             List<Files> resultList = new List<Files>();
             if (result.Count <= 1)
             {
+                Console.WriteLine("Doc khong ra");
                 return null;
             }
             foreach (var f in result)

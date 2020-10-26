@@ -45,7 +45,7 @@ namespace WindowsFormsApp1
             //Support.DirSearch("D:\\test\\", client); // đọc riêng ổ E
         }
 
-        private async void DirSearch()
+        private void DirSearch()
         {
             var settings = new ConnectionSettings(new Uri("http://localhost:9200"))
                 .DefaultIndex("filesmanager");
@@ -146,7 +146,7 @@ namespace WindowsFormsApp1
         {
         }
 
-        private async void updatebtt_Click(object sender, EventArgs e)
+        private void updatebtt_Click(object sender, EventArgs e)
         {
             var settings = new ConnectionSettings(new Uri("http://localhost:9200"))
                 .DefaultIndex("filesmanager");

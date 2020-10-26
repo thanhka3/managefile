@@ -31,14 +31,15 @@ namespace WindowsFormsApp1
             //them dong hien len grid
         }
 
-        private void SearchFile()
+        private async void SearchFile()
         {
             var settings = new ConnectionSettings(new Uri("http://localhost:9200"))
-               .DefaultIndex("filesmanager");
+                .DefaultIndex("filesmanager");
             var client = new ElasticClient(settings);
-            var textsearch = Searchbar.Text.ToString();
+            string textsearch = Searchbar.Text.ToString();
             Console.WriteLine(textsearch);
-            var list = Support.SearchFile(textsearch, client).Result;
+            var list = await Support.SearchFile(textsearch, client);
+
             //Console.WriteLine(list[0].url);
             SearchView.Invoke(new MethodInvoker(delegate ()
             {
