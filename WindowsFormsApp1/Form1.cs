@@ -2,6 +2,9 @@
 using Microsoft.WindowsAPICodePack.Shell;
 using Nest;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -13,6 +16,7 @@ namespace WindowsFormsApp1
         private System.Windows.Forms.Timer uiDecoupleTimer = new System.Windows.Forms.Timer();
         private AutoResetEvent selectionChanged = new AutoResetEvent(false);
         private AutoResetEvent itemsChanged = new AutoResetEvent(false);
+        public List<Files> list = new List<Files>();
 
         public Form1()
         {
@@ -29,8 +33,28 @@ namespace WindowsFormsApp1
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            // as
+
+            // list ổ đĩa
+            //string[] drives = Environment.GetLogicalDrives();
+            Thread thread = new Thread(new ThreadStart(this.DirSearch));
+            // Thread thread = new Thread( Support.DirSearch("D:\\test\\", client));
+            thread.IsBackground = true;
+            thread.Start();
+
+            //Support.DirSearch("D:\\test\\", client); // đọc riêng ổ E
         }
 
+        private async void DirSearch()
+        {
+            var settings = new ConnectionSettings(new Uri("http://localhost:9200"))
+                .DefaultIndex("filesmanager");
+            var client = new ElasticClient(settings);
+
+            Support.DirSearch("D:\\s2\\", client);
+        }
+
+        //
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
@@ -122,26 +146,42 @@ namespace WindowsFormsApp1
         {
         }
 
-        private void updatebtt_Click(object sender, EventArgs e)
+        private async void updatebtt_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show("THIS MAY TAKE HOURS TO ADD", "Alert", MessageBoxButtons.YesNo);
-            if (dialogResult == DialogResult.Yes)
+            var settings = new ConnectionSettings(new Uri("http://localhost:9200"))
+                .DefaultIndex("filesmanager");
+            var client = new ElasticClient(settings);
+
+            // list ổ đĩa
+            //string[] drives = Environment.GetLogicalDrives();
+            // Thread thread = new Thread(Support.DirSearch("D:\\test\\", client));
+
+            Support.DirSearch("D:\\test\\", client); // đọc riêng ổ E
+        }
+
+        private void OnApplicationExit(object sender, EventArgs e)
+        {
+            // When the application is exiting, write the application data to the
+            // user file and close it.
+
+            try
             {
                 var settings = new ConnectionSettings(new Uri("http://localhost:9200"))
-                    .DefaultIndex("filesmanager");
+                       .DefaultIndex("filesmanager");
                 var client = new ElasticClient(settings);
-                // list ổ đĩa
-                //string[] drives = Environment.GetLogicalDrives();
-                Support.DirSearch("D:\\test\\", client); // đọc riêng ổ E
+                // Ignore any errors that might occur while closing the file handle.
+                client.Indices.DeleteAsync("filesmanager");
             }
-            else if (dialogResult == DialogResult.No)
-            {
-                //do something else
-            }
+            catch { }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            /*  var settings = new ConnectionSettings(new Uri("http://localhost:9200"))
+           .DefaultIndex("filesmanager");
+              var client = new ElasticClient(settings);
+              var textsearch = SearchBar.Text;
+              list = Support.SearchFile(textsearch, client).Result;*/
             var f2 = new Form2();
             f2.Show();
             this.Hide();

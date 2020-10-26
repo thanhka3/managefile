@@ -31,14 +31,14 @@
             this.components = new System.ComponentModel.Container();
             this.Searchbar = new System.Windows.Forms.TextBox();
             this.Searchbtt = new System.Windows.Forms.Button();
-            this.SearchView = new System.Windows.Forms.DataGridView();
-            this.filenameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.typesDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.urlDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.bodyDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.filesBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            ((System.ComponentModel.ISupportInitialize)(this.SearchView)).BeginInit();
+            this.bodyDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.urlDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.typesDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.filenameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SearchView = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.filesBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SearchView)).BeginInit();
             this.SuspendLayout();
             // 
             // Searchbar
@@ -57,6 +57,38 @@
             this.Searchbtt.Text = "Search";
             this.Searchbtt.UseVisualStyleBackColor = true;
             this.Searchbtt.Click += new System.EventHandler(this.Searchbtt_Click);
+            // 
+            // filesBindingSource
+            // 
+            this.filesBindingSource.DataSource = typeof(WindowsFormsApp1.Files);
+            // 
+            // bodyDataGridViewTextBoxColumn
+            // 
+            this.bodyDataGridViewTextBoxColumn.DataPropertyName = "body";
+            this.bodyDataGridViewTextBoxColumn.HeaderText = "body";
+            this.bodyDataGridViewTextBoxColumn.Name = "bodyDataGridViewTextBoxColumn";
+            this.bodyDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // urlDataGridViewTextBoxColumn
+            // 
+            this.urlDataGridViewTextBoxColumn.DataPropertyName = "url";
+            this.urlDataGridViewTextBoxColumn.HeaderText = "url";
+            this.urlDataGridViewTextBoxColumn.Name = "urlDataGridViewTextBoxColumn";
+            this.urlDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // typesDataGridViewTextBoxColumn
+            // 
+            this.typesDataGridViewTextBoxColumn.DataPropertyName = "types";
+            this.typesDataGridViewTextBoxColumn.HeaderText = "types";
+            this.typesDataGridViewTextBoxColumn.Name = "typesDataGridViewTextBoxColumn";
+            this.typesDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // filenameDataGridViewTextBoxColumn
+            // 
+            this.filenameDataGridViewTextBoxColumn.DataPropertyName = "filename";
+            this.filenameDataGridViewTextBoxColumn.HeaderText = "filename";
+            this.filenameDataGridViewTextBoxColumn.Name = "filenameDataGridViewTextBoxColumn";
+            this.filenameDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // SearchView
             // 
@@ -77,38 +109,6 @@
             this.SearchView.TabIndex = 2;
             this.SearchView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.SearchView_CellDoubleClick);
             // 
-            // filenameDataGridViewTextBoxColumn
-            // 
-            this.filenameDataGridViewTextBoxColumn.DataPropertyName = "filename";
-            this.filenameDataGridViewTextBoxColumn.HeaderText = "filename";
-            this.filenameDataGridViewTextBoxColumn.Name = "filenameDataGridViewTextBoxColumn";
-            this.filenameDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // typesDataGridViewTextBoxColumn
-            // 
-            this.typesDataGridViewTextBoxColumn.DataPropertyName = "types";
-            this.typesDataGridViewTextBoxColumn.HeaderText = "types";
-            this.typesDataGridViewTextBoxColumn.Name = "typesDataGridViewTextBoxColumn";
-            this.typesDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // urlDataGridViewTextBoxColumn
-            // 
-            this.urlDataGridViewTextBoxColumn.DataPropertyName = "url";
-            this.urlDataGridViewTextBoxColumn.HeaderText = "url";
-            this.urlDataGridViewTextBoxColumn.Name = "urlDataGridViewTextBoxColumn";
-            this.urlDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // bodyDataGridViewTextBoxColumn
-            // 
-            this.bodyDataGridViewTextBoxColumn.DataPropertyName = "body";
-            this.bodyDataGridViewTextBoxColumn.HeaderText = "body";
-            this.bodyDataGridViewTextBoxColumn.Name = "bodyDataGridViewTextBoxColumn";
-            this.bodyDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // filesBindingSource
-            // 
-            this.filesBindingSource.DataSource = typeof(WindowsFormsApp1.Files);
-            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -119,8 +119,8 @@
             this.Controls.Add(this.Searchbar);
             this.Name = "Form2";
             this.Text = "Search";
-            ((System.ComponentModel.ISupportInitialize)(this.SearchView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.filesBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SearchView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -130,11 +130,11 @@
 
         private System.Windows.Forms.TextBox Searchbar;
         private System.Windows.Forms.Button Searchbtt;
-        private System.Windows.Forms.DataGridView SearchView;
-        private System.Windows.Forms.DataGridViewTextBoxColumn filenameDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn typesDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn urlDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn bodyDataGridViewTextBoxColumn;
         private System.Windows.Forms.BindingSource filesBindingSource;
+        private System.Windows.Forms.DataGridViewTextBoxColumn bodyDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn urlDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn typesDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn filenameDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridView SearchView;
     }
 }

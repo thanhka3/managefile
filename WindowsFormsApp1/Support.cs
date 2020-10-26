@@ -5,6 +5,7 @@ using Nest;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace WindowsFormsApp1
@@ -60,7 +61,7 @@ namespace WindowsFormsApp1
                     var asyncIndexResponse = await client.IndexDocumentAsync(files);
 
                     //Console.WriteLine(f);
-                    //Console.WriteLine(filenames);
+                    Console.WriteLine(filenames);
                 }
 
                 foreach (string d in Directory.GetDirectories(sDir))
@@ -123,6 +124,7 @@ namespace WindowsFormsApp1
 
             // Close word.
             document.Close();
+
             application.Quit();
             return body;
         }
@@ -180,7 +182,7 @@ namespace WindowsFormsApp1
         // read file txt
         public static string ReadFileTxt(string url)
         {
-            string text = System.IO.File.ReadAllText(url);
+            string text = File.ReadAllText(url);
 
             return text;
         }

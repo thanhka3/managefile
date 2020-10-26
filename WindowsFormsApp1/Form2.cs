@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace WindowsFormsApp1
@@ -19,16 +20,31 @@ namespace WindowsFormsApp1
              if (dialogResult == DialogResult.Yes)
              { }*/
 
-            var settings = new ConnectionSettings(new Uri("http://localhost:9200"))
-               .DefaultIndex("filesmanager");
-            var client = new ElasticClient(settings);
-            var textsearch = Searchbar.Text;
-            var list = Support.SearchFile(textsearch, client).Result;
             // taoạo
-            SearchView.DataSource = list;
+            Thread thread = new Thread(new ThreadStart(this.SearchFile));
+            // Thread thread = new Thread( Support.DirSearch("D:\\test\\", client));
+            thread.IsBackground = true;
+            thread.Start();
+
             //SearchView.DataBindings;
             //lay data
             //them dong hien len grid
+        }
+
+        private void SearchFile()
+        {
+            var settings = new ConnectionSettings(new Uri("http://localhost:9200"))
+               .DefaultIndex("filesmanager");
+            var client = new ElasticClient(settings);
+            var textsearch = Searchbar.Text.ToString();
+            Console.WriteLine(textsearch);
+            var list = Support.SearchFile(textsearch, client).Result;
+            //Console.WriteLine(list[0].url);
+            SearchView.Invoke(new MethodInvoker(delegate ()
+            {
+                SearchView.DataSource = list;
+            }
+            ));
         }
 
         private void SearchView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
