@@ -59,9 +59,6 @@ namespace WindowsFormsApp1
                     };
 
                     var asyncIndexResponse = await client.IndexDocumentAsync(files);
-
-                    //Console.WriteLine(f);
-                    Console.WriteLine(filenames);
                 }
 
                 foreach (string d in Directory.GetDirectories(sDir))
@@ -97,7 +94,6 @@ namespace WindowsFormsApp1
             List<Files> resultList = new List<Files>();
             if (result.Count <= 1)
             {
-                Console.WriteLine("Doc khong ra");
                 return null;
             }
             foreach (var f in result)
@@ -126,7 +122,7 @@ namespace WindowsFormsApp1
 
             // Close word.
             document.Close();
-
+            //kill
             application.Quit();
             return body;
         }
@@ -155,6 +151,7 @@ namespace WindowsFormsApp1
                         body = body + " " + xlRange.Cells[i, j].Value2.ToString();
                 }
             }
+
             xlWorkbook.Close();
             xlApp.Quit();
             return body;

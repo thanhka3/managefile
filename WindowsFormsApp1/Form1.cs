@@ -51,7 +51,7 @@ namespace WindowsFormsApp1
                 .DefaultIndex("filesmanager");
             var client = new ElasticClient(settings);
 
-            Support.DirSearch("D:\\s2\\", client);
+            Support.DirSearch(@"D:\s2\", client);
         }
 
         //

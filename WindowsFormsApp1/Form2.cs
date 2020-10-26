@@ -37,7 +37,7 @@ namespace WindowsFormsApp1
                 .DefaultIndex("filesmanager");
             var client = new ElasticClient(settings);
             string textsearch = Searchbar.Text.ToString();
-            Console.WriteLine(textsearch);
+
             var list = await Support.SearchFile(textsearch, client);
 
             //Console.WriteLine(list[0].url);
