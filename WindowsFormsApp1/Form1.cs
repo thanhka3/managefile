@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
+using System.Security.Permissions;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -20,7 +21,11 @@ namespace WindowsFormsApp1
 
         public Form1()
         {
+
             InitializeComponent();
+
+            Run();
+
             explorerBrowser.NavigationLog.NavigationLogChanged += new EventHandler<NavigationLogEventArgs>(NavigationLog_NavigationLogChanged);
             uiDecoupleTimer.Tick += new EventHandler(uiDecoupleTimer_Tick);
 
@@ -29,6 +34,9 @@ namespace WindowsFormsApp1
 
             uiDecoupleTimer.Interval = 100;
             uiDecoupleTimer.Start();
+
+           
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -42,6 +50,11 @@ namespace WindowsFormsApp1
             thread.IsBackground = true;
             thread.Start();
 
+
+            //Run();
+
+
+
             //Support.DirSearch("D:\\test\\", client); // đọc riêng ổ E
         }
 
@@ -50,6 +63,16 @@ namespace WindowsFormsApp1
             var settings = new ConnectionSettings(new Uri("http://localhost:9200"))
                 .DefaultIndex("filesmanager");
             var client = new ElasticClient(settings);
+
+            if (!client.Indices.Exists("filesmanager").Exists)
+            {
+                Support.DirSearch(@"D:\Khởi nghiệp\", client);
+            }
+            else {
+                // check listener và update
+               
+            }
+
 
             Support.DirSearch(@"D:\s2\", client);
         }
@@ -185,6 +208,127 @@ namespace WindowsFormsApp1
             var f2 = new Form2();
             f2.Show();
             this.Hide();
+        }
+
+
+
+        [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
+        private void Run()
+        {
+
+
+            /*Fileupdate(@"D:\");
+            Fileupdate(@"E:\");
+            Fileupdate(@"F:\");*/
+            Thread thr = new Thread(new ThreadStart(this.Fileupdate));
+            thr.IsBackground = true;
+            thr.Start();
+
+        }
+
+        private void Fileupdate()
+        {
+            string[] drives = Environment.GetLogicalDrives();
+            List<FileSystemWatcher> list = new List<FileSystemWatcher>();
+            for (int i = 0; i < drives.Length; i++)
+            {
+                FileSystemWatcher watcher = new FileSystemWatcher();
+                list.Add(watcher);
+            }
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                list[i].IncludeSubdirectories = true;
+
+                /*if (drives[i] == @"C:\")
+                {
+                    list[i].Path = drives[i] + @"Users\Admin\";
+                }
+                else
+                {
+                    list[i].Path = drives[i];
+                }*/
+
+                list[i].Path = @"D:\";
+
+                // Watch for changes in LastAccess and LastWrite times, and
+                // the renaming of files or directories.
+                list[i].NotifyFilter = NotifyFilters.LastAccess
+                                         | NotifyFilters.LastWrite
+                                         | NotifyFilters.FileName
+                                         | NotifyFilters.DirectoryName;
+
+                // Only watch text files.
+                list[i].Filter = "*.*";
+
+                // Add event handlers.
+                list[i].Changed += OnChanged;
+                list[i].Created += OnCreated;
+                list[i].Deleted += OnDeleted;
+                list[i].Renamed += OnRenamed;
+
+                // Begin watching.
+                list[i].EnableRaisingEvents = true;
+
+                // Wait for the user to quit the program.
+                /* Console.WriteLine("Press 'q' to quit the sample.");
+                 while (Console.Read() != 'q') ;*/
+                Thread.Sleep(500);
+            }
+        }
+
+        // Define the event handlers.
+        private void OnChanged(object source, FileSystemEventArgs e)
+        {
+            // Specify what is done when a file is changed, created, or deleted.
+            change.Invoke(new Action(() =>
+            {
+                change.Text = e.FullPath;
+            }));
+        }
+
+        private void OnCreated(object source, FileSystemEventArgs e)
+        {
+            change.Invoke(new Action(() =>
+            {
+                change.Text = e.FullPath;
+            }));
+
+            var settings = new ConnectionSettings(new Uri("http://localhost:9200"))
+                .DefaultIndex("filesmanager");
+            var client = new ElasticClient(settings);
+
+            Support.Create(e.FullPath, client);
+        }
+
+        private void OnDeleted(object source, FileSystemEventArgs e)
+        {
+            change.Invoke(new Action(() =>
+            {
+                change.Text = e.FullPath;
+            }));
+
+
+            // khởi tạo client
+            var settings = new ConnectionSettings(new Uri("http://localhost:9200"))
+                .DefaultIndex("filesmanager");
+            var client = new ElasticClient(settings);
+
+            Support.Delete(e.FullPath, client);
+        }
+
+        private void OnRenamed(object source, RenamedEventArgs e)
+        {
+            change.Invoke(new Action(() =>
+            {
+                change.Text = e.OldFullPath + " change: "+e.FullPath;
+            }));
+
+            var settings = new ConnectionSettings(new Uri("http://localhost:9200"))
+                .DefaultIndex("filesmanager");
+            var client = new ElasticClient(settings);
+
+            Support.UpdateName(e.OldFullPath,e.FullPath, client);
         }
     }
 }

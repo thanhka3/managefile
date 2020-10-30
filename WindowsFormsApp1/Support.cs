@@ -5,6 +5,7 @@ using Nest;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
@@ -102,6 +103,117 @@ namespace WindowsFormsApp1
             }
 
             return resultList;
+        }
+
+
+
+        
+        public static async void UpdateName(string oldurl,string newurl ,ElasticClient client) {
+
+            //E:\learn\2020\Khởi nghiệp\\baitap_chuong4.pptx
+            //string text = @"E:\learn\2020\Khởi nghiệp\baitap_chuong3.docx";
+            var searchResults = await client.SearchAsync<Files>(s => s
+            .AllIndices()
+            .From(0)
+            .Size(200)
+            .Query(q => q
+            .Match(m => m
+            .Field(f => f.url)
+            .Query(oldurl)))
+            );
+
+            var resultHit = searchResults.Hits.ToList();
+            var rusultDoc = searchResults.Documents.ToList();
+            string id = "";
+            Files files = new Files();
+            for (int i = 0; i < resultHit.Count; i++)
+            {
+                if (rusultDoc[i].url == oldurl)
+                {
+                    id = resultHit[i].Id;
+                    files = rusultDoc[i];
+                }
+
+            }
+
+            // hàm đọc file để lấy body
+            files.url = newurl;
+
+            var response = await client.UpdateAsync(DocumentPath<Files>
+                .Id(id),
+                u => u
+                    .Index("filesmanager")
+                    .DocAsUpsert(true)
+                    .Doc(files));
+
+        }
+
+
+
+        public static async void Create(string url, ElasticClient client) {
+            string[] listF = url.Split('\\');
+            string filenames = listF[listF.Length - 1];
+            string[] types = filenames.Split('.');
+
+
+            // đuôi file
+            string types2 = types[types.Length - 1];
+            string noidung = "";
+            // hiện tại test chưa cần nội dung
+            // nên phần này bỏ đi
+            //string noidung = ReadFile(f, types2);
+
+
+            // khởi tạo file
+            var files = new Files
+            {
+                url = url,
+                filename = filenames,
+                body = noidung,
+                types = types2
+            };
+
+            var asyncIndexResponse = await client.IndexDocumentAsync(files);
+
+        }
+        // Hàm delete
+        public static async void Delete(string url, ElasticClient client)
+        {
+            
+
+            //E:\learn\2020\Khởi nghiệp\\baitap_chuong4.pptx
+            //string text = @"E:\learn\2020\Khởi nghiệp\baitap_chuong4.pptx";
+            var searchResults = await client.SearchAsync<Files>(s => s
+            .AllIndices()
+            .From(0)
+            .Size(200)
+            .Query(q => q
+            .Match(m => m
+            .Field(f => f.url)
+            .Query(url)))
+            );
+
+            var resultHit = searchResults.Hits.ToList();
+            var rusultDoc = searchResults.Documents.ToList();
+            string id = "";
+            for (int i = 0; i < resultHit.Count; i++)
+            {
+                if (rusultDoc[i].url == url)
+                {
+                    id = resultHit[i].Id;
+                }
+
+
+            }
+            //string dl = @"{/filesmanager/_doc/yoz7ZHUBLyuMYkFKjSMh}";
+            //var rsd = await client.DeleteAsync<Files>(dl);
+
+
+
+            var response = await client.DeleteAsync<Files>(id, d => d.Index("filesmanager"));
+
+            
+
         }
 
         // read file word

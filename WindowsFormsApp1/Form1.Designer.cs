@@ -37,7 +37,7 @@
             this.lbl_fileName_select = new System.Windows.Forms.Label();
             this.updatebtt = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
-            this.SearchBar = new System.Windows.Forms.TextBox();
+            this.change = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // explorerBrowser
@@ -134,19 +134,19 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // SearchBar
+            // change
             // 
-            this.SearchBar.Location = new System.Drawing.Point(123, 0);
-            this.SearchBar.Name = "SearchBar";
-            this.SearchBar.Size = new System.Drawing.Size(424, 20);
-            this.SearchBar.TabIndex = 10;
+            this.change.Location = new System.Drawing.Point(123, 0);
+            this.change.Name = "change";
+            this.change.Size = new System.Drawing.Size(424, 20);
+            this.change.TabIndex = 10;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(774, 520);
-            this.Controls.Add(this.SearchBar);
+            this.Controls.Add(this.change);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.updatebtt);
             this.Controls.Add(this.lbl_fileName_select);
@@ -176,7 +176,7 @@
         private System.Windows.Forms.Label lbl_fileName_select;
         private System.Windows.Forms.Button updatebtt;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TextBox SearchBar;
+        private System.Windows.Forms.TextBox change;
     }
 }
 
