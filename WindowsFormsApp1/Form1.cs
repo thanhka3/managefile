@@ -66,7 +66,19 @@ namespace WindowsFormsApp1
 
             if (!client.Indices.Exists("filesmanager").Exists)
             {
-                Support.DirSearch(@"D:\Khởi nghiệp\", client);
+                string[] drives = Environment.GetLogicalDrives();
+                for (int i = 0; i < drives.Length; i++) {
+                    if (drives[i] == @"C:\")
+                    {
+                        string url = drives[i] + @"Users\Admin\";
+                        Support.DirSearch(url, client);
+                    }
+                    else
+                    {
+                        Support.DirSearch(drives[i], client);
+                    }
+                }
+                
             }
             else {
                 // check listener và update
@@ -74,7 +86,7 @@ namespace WindowsFormsApp1
             }
 
 
-            Support.DirSearch(@"D:\s2\", client);
+            //Support.DirSearch(@"D:\s2\", client);
         }
 
         //
@@ -200,11 +212,7 @@ namespace WindowsFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            /*  var settings = new ConnectionSettings(new Uri("http://localhost:9200"))
-           .DefaultIndex("filesmanager");
-              var client = new ElasticClient(settings);
-              var textsearch = SearchBar.Text;
-              list = Support.SearchFile(textsearch, client).Result;*/
+            
             var f2 = new Form2();
             f2.Show();
             this.Hide();
@@ -240,16 +248,16 @@ namespace WindowsFormsApp1
             {
                 list[i].IncludeSubdirectories = true;
 
-                /*if (drives[i] == @"C:\")
+                if (drives[i] == @"C:\")
                 {
                     list[i].Path = drives[i] + @"Users\Admin\";
                 }
                 else
                 {
                     list[i].Path = drives[i];
-                }*/
+                }
 
-                list[i].Path = @"D:\";
+                
 
                 // Watch for changes in LastAccess and LastWrite times, and
                 // the renaming of files or directories.
@@ -283,8 +291,13 @@ namespace WindowsFormsApp1
             // Specify what is done when a file is changed, created, or deleted.
             change.Invoke(new Action(() =>
             {
-                change.Text = e.FullPath;
+                change.Text = e.ChangeType.ToString();
             }));
+
+            var settings = new ConnectionSettings(new Uri("http://localhost:9200"))
+                .DefaultIndex("filesmanager");
+            var client = new ElasticClient(settings);
+            Support.Update(e.FullPath, client);
         }
 
         private void OnCreated(object source, FileSystemEventArgs e)

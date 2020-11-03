@@ -29,26 +29,8 @@ namespace WindowsFormsApp1
 
                     // đuôi file
                     string types2 = types[types.Length - 1];
-                    if (types2 == "docx")
-                    {
-                        noidung = ReadFileWord(f); // vì f là url của file nên lấy f để đọc
-                    }
-                    else if (types2 == "xlsx")
-                    {
-                        noidung = ReadFileExcel(f);
-                    }
-                    else if (types2 == "pdf")
-                    {
-                        noidung = ReadFilePDF(f);
-                    }
-                    else if (types2 == "txt")
-                    {
-                        noidung = ReadFileTxt(f);
-                    }
-                    else
-                    {
-                        noidung = "";
-                    }
+
+                    // gọi hàm readfile để sử dụng
 
                     // khởi tạo file
                     var files = new Files
@@ -106,7 +88,81 @@ namespace WindowsFormsApp1
         }
 
 
+        public string ReadFile(string url) {
 
+            string[] listF = url.Split('\\');
+            string filenames = listF[listF.Length - 1];
+            string[] types = filenames.Split('.');
+            string noidung = "";
+
+            // đuôi file
+            string types2 = types[types.Length - 1];
+
+        
+            if (types2 == "docx")
+            {
+                noidung = ReadFileWord(url); // vì f là url của file nên lấy f để đọc
+            }
+            else if (types2 == "xlsx")
+            {
+                noidung = ReadFileExcel(url);
+            }
+            else if (types2 == "pdf")
+            {
+                noidung = ReadFilePDF(url);
+            }
+            else if (types2 == "txt")
+            {
+                noidung = ReadFileTxt(url);
+            }
+            else
+            {
+                noidung = "";
+            }
+            return noidung;
+        }
+
+        public static async void Update(string url, ElasticClient client) {
+            var searchResults = await client.SearchAsync<Files>(s => s
+            .AllIndices()
+            .From(0)
+            .Size(200)
+            .Query(q => q
+            .Match(m => m
+            .Field(f => f.url)
+            .Query(url)))
+            );
+
+            var resultHit = searchResults.Hits.ToList();
+            var rusultDoc = searchResults.Documents.ToList();
+            string id = "";
+            Files files = new Files();
+            for (int i = 0; i < resultHit.Count; i++)
+            {
+                if (rusultDoc[i].url == url)
+                {
+                    id = resultHit[i].Id;
+                    files = rusultDoc[i];
+                }
+
+            }
+
+            if (id == "")
+            {
+                // do nothing
+            }
+            else
+            {
+                files.body = "da thay doi";
+
+                var response = await client.UpdateAsync(DocumentPath<Files>
+                    .Id(id),
+                    u => u
+                        .Index("filesmanager")
+                        .DocAsUpsert(true)
+                        .Doc(files));
+            }
+        }
         
         public static async void UpdateName(string oldurl,string newurl ,ElasticClient client) {
 
@@ -136,15 +192,23 @@ namespace WindowsFormsApp1
 
             }
 
-            // hàm đọc file để lấy body
-            files.url = newurl;
+            if (id == "")
+            {
+                // do nothing
+            }
+            else {
+                files.url = newurl;
 
-            var response = await client.UpdateAsync(DocumentPath<Files>
-                .Id(id),
-                u => u
-                    .Index("filesmanager")
-                    .DocAsUpsert(true)
-                    .Doc(files));
+                var response = await client.UpdateAsync(DocumentPath<Files>
+                    .Id(id),
+                    u => u
+                        .Index("filesmanager")
+                        .DocAsUpsert(true)
+                        .Doc(files));
+            }
+
+
+            
 
         }
 
@@ -208,9 +272,16 @@ namespace WindowsFormsApp1
             //string dl = @"{/filesmanager/_doc/yoz7ZHUBLyuMYkFKjSMh}";
             //var rsd = await client.DeleteAsync<Files>(dl);
 
+            if (id == "")
+            {
+                // do nothing
+            }
+            else
+            {
+                var response = await client.DeleteAsync<Files>(id, d => d.Index("filesmanager"));
+            }
 
-
-            var response = await client.DeleteAsync<Files>(id, d => d.Index("filesmanager"));
+            
 
             
 
